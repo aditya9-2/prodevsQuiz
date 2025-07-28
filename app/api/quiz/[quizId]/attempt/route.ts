@@ -59,7 +59,13 @@ export async function POST(
             data: {
                 userId,
                 quizId,
-                score
+                score,
+                AttemptAnswer: {
+                    create: detailedResult.map(ans => ({
+                        questionId: ans.questionId,
+                        selectedAnswer: ans.selectedAnswer
+                    }))
+                }
             }
         });
 
