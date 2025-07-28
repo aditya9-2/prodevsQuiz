@@ -1,7 +1,8 @@
 import { client } from "@/db";
 import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
-import jwt from "jsonwebtoken"
+// import jwt from "jsonwebtoken"
+import { SignJWT } from "jose";
 
 export async function POST(req: NextRequest) {
 
@@ -34,9 +35,12 @@ export async function POST(req: NextRequest) {
             }, { status: 401 });
         }
 
-        const token = jwt.sign({
-            id: user.id
-        }, process.env.JWT_SECRET_KEY!);
+        const secret = new TextEncoder().encode(process.env.JWT_SECRET_KEY!);
+        const token = await new SignJWT({ id: user.id, role: user.role })
+            .setProtectedHeader({ alg: "HS256" })
+            .setIssuedAt()
+            .setExpirationTime('7d')
+            .sign(secret);
 
         return NextResponse.json({
             message: "Signin successful",
