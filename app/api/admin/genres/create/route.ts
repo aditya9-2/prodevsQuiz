@@ -5,9 +5,6 @@ export async function POST(req: NextRequest) {
 
     try {
 
-        const user = await client.user.findUnique({ where: { id: 6 } });
-        console.log("User:", user);
-
         const body = await req.json();
 
         const { title } = body;
