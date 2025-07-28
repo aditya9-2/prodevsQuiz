@@ -11,7 +11,19 @@ interface RequestWithUser extends NextRequest {
 }
 
 export const config = {
-    matcher: ["/api/admin/genres/create"],
+    matcher: [
+        "/api/admin/genres/create",
+        "/api/admin/genres/:id/delete",
+        "/api/admin/genres/:id/update",
+        "/api/admin/genre/:genreId/quiz/create",
+        "/api/admin/genre/:genreId/quiz/delete",
+        "/api/admin/genre/:genreId/quiz/all",
+        "/api/quiz/:quizId",
+        "/api/quiz/:quizId/attempt",
+        "/api/user/:userId/attempts",
+        "/api/user/:userId/attempts/:attemptId",
+
+    ],
 };
 
 export async function middleware(req: RequestWithUser) {
@@ -27,7 +39,7 @@ export async function middleware(req: RequestWithUser) {
         }
         const secret = new TextEncoder().encode(process.env.JWT_SECRET_KEY);
         const { payload } = await jwtVerify(token, secret);
-        console.log("Decoded JWT payload:", payload)
+
         const user = payload as {
             id: number | string,
             role: Role
