@@ -36,21 +36,32 @@ model Quiz {
 }
 
 model Question {
-  ind           Int      @id @default(autoincrement())
-  quiz          Quiz     @relation(fields: [quizId], references: [id])
+  ind           Int             @id @default(autoincrement())
+  quiz          Quiz            @relation(fields: [quizId], references: [id])
   quizId        Int
   questiontext  String
   options       String[]
   correctAnswer String
+  AttemptAnswer AttemptAnswer[]
 }
 
 model QuizAttempt {
-  id     Int  @id @default(autoincrement())
-  user   User @relation(fields: [userId], references: [id])
-  userId Int
-  quiz   Quiz @relation(fields: [quizId], references: [id])
-  quizId Int
-  score  Int
+  id            Int             @id @default(autoincrement())
+  user          User            @relation(fields: [userId], references: [id])
+  userId        Int
+  quiz          Quiz            @relation(fields: [quizId], references: [id])
+  quizId        Int
+  score         Int
+  AttemptAnswer AttemptAnswer[]
+}
+
+model AttemptAnswer {
+  id             Int         @id @default(autoincrement())
+  attempt        QuizAttempt @relation(fields: [attemptId], references: [id])
+  attemptId      Int
+  question       Question    @relation(fields: [questionId], references: [ind])
+  questionId     Int
+  selectedAnswer String
 }
 
 enum Role {
